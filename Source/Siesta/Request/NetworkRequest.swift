@@ -130,10 +130,11 @@ internal final class NetworkRequestDelegate: RequestDelegate
                 }
             else
                 {
-                return ResponseInfo(
-                    response: .failure(RequestError(
-                        userMessage: NSLocalizedString("No data available", comment: "userMessage"),
-                        cause: RequestError.Cause.NoLocalDataFor304())))
+                var error = RequestError(userMessage: NSLocalizedString("No data available",
+                                                                        comment: "userMessage"),
+                                         cause: RequestError.Cause.NoLocalDataFor304())
+                error.httpStatusCode = underlyingResponse?.statusCode
+                return ResponseInfo(response: .failure(error))
                 }
             }
         else
